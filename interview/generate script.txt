@@ -1,0 +1,22 @@
+from faker import Faker
+f = Faker()
+mac = input('enter 16 digit mac address')
+lp = input('enter the loopback ip and skip the last digit')
+sap = input('enter 17 digit id')
+
+def routerinfo_generator(n):
+    for i in range(n):
+        info ={
+            'sapid' : sap + str(i),
+            'hostname': f.name(),
+            'loopback': lp + str(i),
+            'macaddress':  mac +str(i)
+                       
+        }
+        
+        yield info
+        
+
+
+x = routerinfo_generator(2)
+print(list(x))

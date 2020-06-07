@@ -1,0 +1,134 @@
+#Q1 Telnet to a server
+import getpass
+import telnetlib
+
+HOST = "http://localhost:8000/"
+user = raw_input("Enter your remote account: ")
+password = getpass.getpass()
+
+tn = telnetlib.Telnet(HOST)
+
+tn.read_until("login: ")
+tn.write(user + "\n")
+if password:
+    tn.read_until("Password: ")
+    tn.write(password + "\n")
+
+tn.write("ls\n")
+tn.write("exit\n")
+
+print tn.read_all()
+
+#@Q2  SSH To a Server
+import paramiko
+host = "test.rebex.net"
+port = 22
+username = "demo"
+password = "password"
+
+command = "ls"
+
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+ssh.connect(host, port, username, password)
+
+stdin, stdout, stderr = ssh.exec_command(command)
+lines = stdout.readlines()
+print(lines)
+
+#Q3 How to check disk usage statistics
+import shutil 
+  
+# Path 
+path = "/home/User/Documents"
+  
+stat = shutil.disk_usage(path) 
+
+print("Disk usage statistics:") 
+print(stat) 
+
+
+#Q4Innode using python
+import os 
+path = os.getcwd() 
+  
+print("Directory entry name and their inode number")  
+with os.scandir(path) as itr: 
+    for entry in itr : 
+        if not entry.name.startswith('.') : 
+            print(entry.name, " :", entry.inode()) 
+            
+            
+#Q5 Getting list of files using python
+import os 
+basepath = 'my_directory/'
+for entry in os.listdir(basepath):
+    if os.path.isfile(os.path.join(basepath, entry)):
+        print(entry)
+        
+#Q copying file from remote server
+from paramiko import SSHClient
+from scp import SCPClient
+ssh = SSHClient()
+ssh.load_system_host_keys()
+ssh.connect('user@server:path')
+with SCPClient(ssh.get_transport()) as scp:
+    scp.put('my_file.txt', 'my_file.txt') # Copy my_file.txt to the server
+
+
+
+##############################################################################33
+Restarting the server when load is higher(Apache)
+# Restart the apache server when the load is higher script
+#!/bin/sh
+
+check=`cat /proc/loadavg | sed 's/./ /' | awk '{print $1}'`
+
+max_load='25'
+
+high_load_log='/var/log/apache_high_load_restart.log';
+
+index_php_loc='/home/site/www/index.php';
+
+apache_init='/etc/init.d/apache2';
+
+site_maintenance_msg="Site Maintenance in progress - We will be back online in a minute";
+if [ $check -gt "$max_load" ]; then>
+cp -rpf $index_php_loc $index_php_loc.bak_ap
+echo "$site_maintenance_msg" > $index_php_loc
+sleep 15;
+if [ $check -gt "$max_load" ]; then
+$apache_init stop
+sleep5
+$apache_init restart
+echo "$(date) : Apache Restart due to excessive load | $check |" >> $high_load_log;
+cp -rpf $index_php_loc.bak_ap $index_php_loc
+fi
+fi
+
+
+
+######################################################################################
+There are Few commands which we use to monitor the performance.
+1)meminfo
+2)mpstat
+3)netstat
+4)nmon
+5)pmap
+6)ps and pstree
+7sar
+8)strace
+9)tcpdump
+10)top
+11)uptime
+12)vmstat
+13)Wireshark
+
+
+Commands we use to check load on server
+uptime
+top
+free
+vmstat
+
+With the help of above command we can montor the server and correspondig action could be taken to reduce the server load.
